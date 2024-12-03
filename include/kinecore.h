@@ -17,14 +17,8 @@ struct leg_position {
 
 //structure for all leg deltas
 struct leg_deltas {
-    float leg_a_a;
-    float leg_a_b;
-    float leg_b_a;
-    float leg_b_b;
-    float leg_c_a;
-    float leg_c_b;
-    float leg_d_a;
-    float leg_d_b;
+    float a_vals[4];
+    float b_vals[4];
 };
 
 //class for managing all kinematic calcs
@@ -52,6 +46,9 @@ class leg {
         //gets the current ideal thetas
         leg_thetas ideal_thetas();
 
+        //gets adjusted ideal thetas
+        leg_thetas adj_ideal_thetas();
+
         //gets the current real thetas
         leg_thetas real_thetas();
 
@@ -72,6 +69,13 @@ class leg {
         float real_a;
         float real_b;
         float seg_lens;
+
+        //here for now, will be used for stabilization and hip y value compensation
+        float stable_offset_a;
+        float stable_offset_b;
+
+        float hip_offset_a;
+        float hip_offset_b;
 };
 
 #endif

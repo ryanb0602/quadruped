@@ -66,3 +66,11 @@ bool leg::set_ideal_x_y(leg_position position) {
 
     return true;
 }
+
+leg_thetas leg::adj_ideal_thetas() {
+    leg_thetas return_structure = {
+        .angle_a = this->ideal_a + this->stable_offset_a + this->hip_offset_a,
+        .angle_b = this->ideal_b + this->stable_offset_b + this->hip_offset_b
+    };
+    return return_structure;
+}
