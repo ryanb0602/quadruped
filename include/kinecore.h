@@ -56,10 +56,12 @@ class leg {
         leg_position real_pos();
 
     private:
+        leg_position forward_kin(float angle_a, float angle_b);
         float ideal_a;
         float ideal_b;
         float real_a;
         float real_b;
+        float seg_lens;
 };
 
 #endif
