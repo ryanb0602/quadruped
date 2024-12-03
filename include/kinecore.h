@@ -1,7 +1,7 @@
-#include <Arduino.h>
-
 #ifndef KINECORE_H
 #define KINECORE_H
+
+//all angles are radians
 
 //struct for easy passing for leg angle data
 struct leg_thetas {
@@ -15,15 +15,24 @@ struct leg_position {
     float pos_y;
 };
 
+//structure for all leg deltas
+struct leg_deltas {
+    float leg_a_a;
+    float leg_a_b;
+    float leg_b_a;
+    float leg_b_b;
+    float leg_c_a;
+    float leg_c_b;
+    float leg_d_a;
+    float leg_d_b;
+};
+
 //class for managing all kinematic calcs
 class kinecore {
 
     public:
-        //find leg angle deltas based on target x and y positions
-        leg_thetas find_leg_deltas_xy(int leg, float targ_x, float targ_y);
-
-        //find leg angle deltas based on target delta positions
-        leg_thetas find_leg_deltas_theta(int leg, float targ_a, float targ_b);
+        //gets all delta angles for motion core
+        leg_deltas all_leg_deltas();
 
         //set leg segment lengths for all legs in meters
         void set_segment_lens(float top_seg, float bottom_seg);
@@ -47,6 +56,7 @@ class leg {
         leg_thetas real_thetas();
 
         //sets the ideal xy
+        //false if pos is unreachable
         bool set_ideal_x_y(leg_position position);
 
         //gets the current ideal end effector xy position
