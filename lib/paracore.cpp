@@ -24,3 +24,15 @@ int parametric::get_runtime() {
 leg_thetas parametric::get_current_vals(int t) {
     return function(t);
 }
+
+int parametric::get_starttime() {
+    return this->start_time;
+}
+
+int parametric::get_lastupdate() {
+    return this->last_update;
+}
+
+void parametric::set_lastupdate(int t) {
+    this->last_update = t;
+}
