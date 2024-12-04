@@ -21,20 +21,6 @@ struct leg_deltas {
     float b_vals[4];
 };
 
-//class for managing all kinematic calcs
-class kinecore {
-
-    public:
-        //gets all delta angles for motion core
-        leg_deltas all_leg_deltas();
-
-        //set leg segment lengths for all legs in meters
-        void set_segment_lens(float top_seg, float bottom_seg);
-
-    private:
-        leg leg_arr[4];
-};
-
 //defines leg
 class leg {
 
@@ -76,6 +62,45 @@ class leg {
 
         float hip_offset_a;
         float hip_offset_b;
+};
+
+//class for managing all kinematic calcs
+class kinecore {
+
+    public:
+        //gets all delta angles for motion core
+        leg_deltas all_leg_deltas();
+
+        //set leg segment lengths for all legs in meters
+        void set_segment_lens(float top_seg, float bottom_seg);
+
+    private:
+        leg leg_arr[4];
+};
+
+class parametric {
+    public:
+        //set the function
+        void set_function(leg_thetas (*function)(int t));
+
+        //set update rate in times per second
+        void set_update_rate(int rate);
+
+        //pull the update rate
+        int get_update_rate();
+
+        //set runtime in millis
+        void set_runtime(int t);
+
+        int get_runtime();
+
+        leg_thetas get_current_vals(int t);
+
+    private:
+        leg_thetas (*function)(int t);
+        int update_rate = 20;
+        int runtime;
+
 };
 
 #endif
