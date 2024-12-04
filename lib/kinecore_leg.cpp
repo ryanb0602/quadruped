@@ -2,6 +2,11 @@
 
 #include <math.h>
 
+void leg::set_real_theta(leg_thetas thetas) {
+    this->real_a = thetas.angle_a;
+    this->real_b = thetas.angle_b;
+}
+
 void leg::set_ideal_theta(leg_thetas thetas) {
     this->ideal_a = thetas.angle_a;
     this->ideal_b = thetas.angle_b;
@@ -73,4 +78,8 @@ leg_thetas leg::adj_ideal_thetas() {
         .angle_b = this->ideal_b + this->stable_offset_b + this->hip_offset_b
     };
     return return_structure;
+}
+
+void leg::set_seg_len(float len) {
+    this->seg_lens = len;
 }

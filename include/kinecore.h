@@ -25,6 +25,9 @@ struct leg_deltas {
 class leg {
 
     public:
+
+        //sets current real
+        void set_real_theta(leg_thetas thetas);
         
         //sets what the ideal angles should currently be
         void set_ideal_theta(leg_thetas thetas);
@@ -47,6 +50,9 @@ class leg {
 
         //gets the current real end effector xy position
         leg_position real_pos();
+
+        //set seglen
+        void set_seg_len(float len);
 
     private:
         leg_position forward_kin(float angle_a, float angle_b);
@@ -74,9 +80,13 @@ class kinecore {
         leg_deltas all_leg_deltas();
 
         //set leg segment lengths for all legs in meters
-        void set_segment_lens(float top_seg, float bottom_seg);
+        void set_segment_lens(float len);
 
         void bind_parametric(leg *targ, parametric (*function)());
+
+        //implemented right now for simulation
+
+        void set_real_thetas(int leg, float a, float b);
 
     private:
         leg leg_arr[4];

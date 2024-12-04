@@ -14,6 +14,13 @@ leg_deltas kinecore::all_leg_deltas() {
 
 }
 
+void kinecore::set_segment_lens(float len) {
+    leg *leg_arr = this->leg_arr;
+    for (int i = 0; i < 4; i ++) {
+        leg_arr[i].set_seg_len(len); 
+    }
+}
+
 void kinecore::bind_parametric(leg *targ, parametric (*function)()) {
     this->parametric_handler.add_active(function(), targ);
 }
