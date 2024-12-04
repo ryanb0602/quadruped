@@ -4,14 +4,13 @@ int para_handler::current_time() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void para_handler::add_active(parametric to_add, float* a, float* b) {
+void para_handler::add_active(parametric to_add, leg *targ) {
 
     if (this->length == 0) {
         this->ll = new para_handler_ll;
 
         this->ll->current = to_add;
-        this->ll->a = a;
-        this->ll->b = b;
+        this->ll->targ = targ;
 
         this->last = ll;
         return;
@@ -24,8 +23,7 @@ void para_handler::add_active(parametric to_add, float* a, float* b) {
     this->last = this->last->ll;
 
     new_ll->current = to_add;
-    new_ll->a = a;
-    new_ll->b = b;
+    new_ll->targ = targ;
 }
 
 void para_handler::update_all() {
@@ -43,9 +41,11 @@ void para_handler::update_all() {
         }
 
         if (this->current_time() - current_para.get_lastupdate() >= (1000 / current_para.get_update_rate())) {
-            leg_thetas update_vals = current_para.get_current_vals(current_time() - current_para.get_starttime());
-            *current_ptr->a = update_vals.angle_a;
-            *current_ptr->b = update_vals.angle_b;
+            leg_position update_vals = current_para.get_current_vals(current_time() - current_para.get_starttime());
+            
+            current_ptr->targ->set_ideal_x_y(update_vals);
+
+            current_para.set_lastupdate(this->current_time());
         }
 
         current_ptr = current_ptr->ll;

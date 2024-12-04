@@ -1,7 +1,7 @@
 #include <kinecore.h>
 #include <paracore.h>
 
-void parametric::set_function(leg_thetas (*function)(int t)) {
+void parametric::set_function(leg_position (*function)(int t)) {
     this->function = function;
 }
 
@@ -21,7 +21,7 @@ int parametric::get_runtime() {
     return this->runtime;
 }
 
-leg_thetas parametric::get_current_vals(int t) {
+leg_position parametric::get_current_vals(int t) {
     return function(t);
 }
 

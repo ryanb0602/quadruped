@@ -13,3 +13,7 @@ leg_deltas kinecore::all_leg_deltas() {
     }
 
 }
+
+void kinecore::bind_parametric(leg *targ, parametric (*function)()) {
+    this->parametric_handler.add_active(function(), targ);
+}

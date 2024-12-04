@@ -1,6 +1,8 @@
 #ifndef KINECORE_H
 #define KINECORE_H
 
+#include <paracore.h>
+
 //all angles are radians
 
 //struct for easy passing for leg angle data
@@ -74,8 +76,11 @@ class kinecore {
         //set leg segment lengths for all legs in meters
         void set_segment_lens(float top_seg, float bottom_seg);
 
+        void bind_parametric(leg *targ, parametric (*function)());
+
     private:
         leg leg_arr[4];
+        para_handler parametric_handler;
 };
 
 #endif
