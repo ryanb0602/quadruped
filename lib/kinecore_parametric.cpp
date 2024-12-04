@@ -1,4 +1,5 @@
 #include <kinecore.h>
+#include <paracore.h>
 
 void parametric::set_function(leg_thetas (*function)(int t)) {
     this->function = function;
