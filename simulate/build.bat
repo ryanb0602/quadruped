@@ -1,0 +1,1 @@
+g++ -I"C:\Users\Ryan Berube\Documents\Quadruped\include" -fPIC -shared -o libmylibrary.dll "C:\Users\Ryan Berube\Documents\Quadruped\lib\*.cpp" simlink.cpp

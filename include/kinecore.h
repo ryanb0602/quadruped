@@ -86,7 +86,7 @@ class kinecore {
 
         //implemented right now for simulation
 
-        void set_real_thetas(int leg, float a, float b);
+        void set_real_thetas(int leg_n, float a, float b);
 
     private:
         leg leg_arr[4];
