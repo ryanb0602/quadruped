@@ -55,7 +55,7 @@ class para_handler {
     private:
         int current_time();
         void delete_para(para_handler_ll *ll);
-        para_handler_ll ll;
+        para_handler_ll *ll;
         para_handler_ll *last;
         int length = 0;
 };

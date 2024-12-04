@@ -7,11 +7,13 @@ int para_handler::current_time() {
 void para_handler::add_active(parametric to_add, float* a, float* b) {
 
     if (this->length == 0) {
-        this->ll.current = to_add;
-        this->ll.a = a;
-        this->ll.b = b;
+        this->ll = new para_handler_ll;
 
-        this->last = &ll;
+        this->ll->current = to_add;
+        this->ll->a = a;
+        this->ll->b = b;
+
+        this->last = ll;
         return;
     }
 
@@ -19,13 +21,15 @@ void para_handler::add_active(parametric to_add, float* a, float* b) {
     para_handler_ll *new_ll = this->last->ll;
     this->length += 1;
 
+    this->last = this->last->ll;
+
     new_ll->current = to_add;
     new_ll->a = a;
     new_ll->b = b;
 }
 
 void para_handler::update_all() {
-    para_handler_ll *current_ptr = &this->ll;
+    para_handler_ll *current_ptr = this->ll;
     while(true) {
 
         if (current_ptr == nullptr) {break;}
@@ -39,10 +43,47 @@ void para_handler::update_all() {
         }
 
         if (this->current_time() - current_para.get_lastupdate() >= (1000 / current_para.get_update_rate())) {
-            //update theta vals
+            leg_thetas update_vals = current_para.get_current_vals(current_time() - current_para.get_starttime());
+            *current_ptr->a = update_vals.angle_a;
+            *current_ptr->b = update_vals.angle_b;
         }
 
-        //set nxt ptr
+        current_ptr = current_ptr->ll;
 
     }
+}
+
+void para_handler::delete_para(para_handler_ll *ll) {
+    if (this->length == 1) {
+        delete this->ll;
+        this->length--;
+        this->last = nullptr;
+        return;
+    }
+
+    if (ll == this->last) {
+        para_handler_ll *current_ptr;
+        for (int i = 0; i < this->length - 2; i++) {
+            current_ptr = current_ptr->ll;
+        }
+        this->last = current_ptr;
+        delete ll;
+        this->length--;
+        return;
+    }
+
+    para_handler_ll *current_ptr = this->ll;
+    para_handler_ll *before_ptr = nullptr;
+    while (true) {
+        if (current_ptr == ll) {
+            break;
+        }
+        before_ptr = current_ptr;
+        current_ptr = current_ptr->ll;
+    }
+
+    before_ptr->ll = ll->ll;
+    delete ll;
+    this->length--;
+
 }
