@@ -1,6 +1,9 @@
 #include <kinecore.h>
 #include <chrono>
 
+#ifndef PARACORE_H
+#define PARACORE_H
+
 class parametric {
     public:
         //set the function
@@ -59,3 +62,5 @@ class para_handler {
         para_handler_ll *last;
         int length = 0;
 };
+
+#endif

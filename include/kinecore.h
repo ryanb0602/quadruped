@@ -1,8 +1,6 @@
 #ifndef KINECORE_H
 #define KINECORE_H
 
-#include <paracore.h>
-
 //all angles are radians
 
 //struct for easy passing for leg angle data
@@ -65,6 +63,8 @@ class leg {
         float hip_offset_a;
         float hip_offset_b;
 };
+
+#include <paracore.h>
 
 //class for managing all kinematic calcs
 class kinecore {
