@@ -8,6 +8,7 @@ void leg::set_real_theta(leg_thetas thetas) {
 }
 
 void leg::set_ideal_theta(leg_thetas thetas) {
+
     this->ideal_a = thetas.angle_a;
     this->ideal_b = thetas.angle_b;
 }
@@ -52,19 +53,29 @@ bool leg::set_ideal_x_y(leg_position position) {
     float ee_x = position.pos_x;
     float ee_y = position.pos_y;
 
-    float r = sqrt(powf(ee_x, 2) + powf(ee_y, 2));
-    float phi = atan2f(ee_y, ee_x);
+    // Length of the segments (assumed equal in this case)
+    float L = this->seg_lens;
 
-    if (r > 2 * this->seg_lens) {
+    // Distance to the end-effector
+    float distance = sqrtf(powf(ee_x, 2) + powf(ee_y, 2));
+
+    // Check if the target is reachable
+    if (distance > 2 * L || distance < 0) {
         return false;
     }
 
-    float ideal_a = phi - acosf(powf(r, 2) / (2 * this->seg_lens * r));
-    float ideal_b = asinf((ee_y - (this->seg_lens * cos(ideal_a))) / this->seg_lens);
+    // Calculate theta_a (joint 1 angle)
+    float ideal_a = atan2f(ee_y, ee_x) - acosf((powf(L, 2) + powf(distance, 2) - powf(L, 2)) / (2 * L * distance));
+
+    // Calculate theta_b (joint 2 angle relative to joint 1)
+    float ideal_b = acosf((powf(distance, 2) - 2 * powf(L, 2)) / (-2 * powf(L, 2))) - ideal_a + (M_PI);
+
+    // Convert to absolute angle from horizontal
+    float absolute_b = ideal_a + M_PI - ideal_b;
 
     leg_thetas ideals = {
         .angle_a = ideal_a,
-        .angle_b = ideal_b
+        .angle_b = absolute_b
     };
 
     this->set_ideal_theta(ideals);

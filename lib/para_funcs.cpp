@@ -5,7 +5,7 @@
 
 leg_position test_para(int t) {
     float x = sinf(M_PI * t / 1000);
-    float y = -(cosf(M_PI * t / 1000) - 3);
+    float y = -(cosf(M_PI * t / 1000) - 8);
 
     leg_position return_pos = {
         .pos_x = x,

@@ -1,5 +1,6 @@
 #include <paracore.h>
 
+
 int para_handler::current_time() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
@@ -36,8 +37,8 @@ void para_handler::update_all() {
         if (this->current_time() - current_para->get_starttime() >= current_para->get_runtime()) {
             para_handler_ll *to_delete = current_ptr;
             current_ptr = to_delete->ll;
-            delete current_ptr->current;
-            this->delete_para(current_ptr);
+            delete current_para;
+            this->delete_para(to_delete);
             continue;
         }
 

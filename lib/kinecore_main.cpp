@@ -43,5 +43,5 @@ void kinecore::update_paras() {
 }
 
 leg_position kinecore::leg_x_y(int leg_n) {
-    return this->leg_arr[leg_n].real_pos();
+    return this->leg_arr[leg_n].ideal_pos();
 }

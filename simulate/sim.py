@@ -34,7 +34,6 @@ def store_xy_data(x, y):
     leg_a_xs.append(x)
     leg_a_ys.append(y)
 
-
 setup(LEG_LENGTHS)
 
 setup_basic_test()
@@ -53,5 +52,5 @@ while time.time() - start_time < runtime:
         last_sample = time.time()
 
 
-plt.plot(leg_a_xs, leg_a_ys, 'o')
+plt.scatter(leg_a_xs, leg_a_ys)
 plt.show()
