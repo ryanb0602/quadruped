@@ -23,8 +23,8 @@ void kinecore::set_segment_lens(float len) {
     }
 }
 
-void kinecore::bind_parametric(leg *targ, parametric (*function)()) {
-    this->parametric_handler.add_active(function(), targ);
+void kinecore::bind_parametric(int leg_n, parametric *function) {
+    this->parametric_handler.add_active(function, &this->leg_arr[leg_n]);
 }
 
 void kinecore::set_real_thetas(int leg_n, float a, float b) {
@@ -36,4 +36,12 @@ void kinecore::set_real_thetas(int leg_n, float a, float b) {
     };
 
     target->set_real_theta(vals);
+}
+
+void kinecore::update_paras() {
+    this->parametric_handler.update_all();
+}
+
+leg_position kinecore::leg_x_y(int leg_n) {
+    return this->leg_arr[leg_n].real_pos();
 }

@@ -1,5 +1,6 @@
 #include <kinecore.h>
 #include <paracore.h>
+#include <para_funcs.h>
 
 extern "C" {
 
@@ -19,6 +20,23 @@ void set_real_thetas(int leg, float a, float b) {
 
 leg_deltas get_deltas() {
     return kinematic.all_leg_deltas();
+}
+
+void setup_basic_test() {
+    parametric *test_parametric = new parametric;
+
+    test_parametric->set_function(test_para);
+    test_parametric->set_runtime(2000);
+
+    kinematic.bind_parametric(0, test_parametric);
+}
+
+void update_basic_test() {
+    kinematic.update_paras();
+}
+
+leg_position data_basic_test() {
+    return kinematic.leg_x_y(0);
 }
 
 }

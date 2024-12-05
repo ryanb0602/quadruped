@@ -4,7 +4,7 @@ int para_handler::current_time() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void para_handler::add_active(parametric to_add, leg *targ) {
+void para_handler::add_active(parametric *to_add, leg *targ) {
 
     if (this->length == 0) {
         this->ll = new para_handler_ll;
@@ -32,20 +32,21 @@ void para_handler::update_all() {
 
         if (current_ptr == nullptr) {break;}
 
-        parametric current_para = current_ptr->current;
-        if (this->current_time() - current_para.get_starttime() >= current_para.get_runtime()) {
+        parametric *current_para = current_ptr->current;
+        if (this->current_time() - current_para->get_starttime() >= current_para->get_runtime()) {
             para_handler_ll *to_delete = current_ptr;
             current_ptr = to_delete->ll;
+            delete current_ptr->current;
             this->delete_para(current_ptr);
             continue;
         }
 
-        if (this->current_time() - current_para.get_lastupdate() >= (1000 / current_para.get_update_rate())) {
-            leg_position update_vals = current_para.get_current_vals(current_time() - current_para.get_starttime());
+        if (this->current_time() - current_para->get_lastupdate() >= (1000 / current_para->get_update_rate())) {
+            leg_position update_vals = current_para->get_current_vals(current_time() - current_para->get_starttime());
             
             current_ptr->targ->set_ideal_x_y(update_vals);
 
-            current_para.set_lastupdate(this->current_time());
+            current_para->set_lastupdate(this->current_time());
         }
 
         current_ptr = current_ptr->ll;

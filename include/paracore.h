@@ -41,7 +41,7 @@ class parametric {
 };
 
 struct para_handler_ll {
-    parametric current;
+    parametric *current;
     para_handler_ll* ll = nullptr;
     bool (leg::*xy_set)(leg_position position);
     leg* targ;
@@ -50,7 +50,7 @@ struct para_handler_ll {
 class para_handler {
     public: 
         //add parametric
-        void add_active(parametric to_add, leg* targ);
+        void add_active(parametric *to_add, leg* targ);
 
         //update parametrics
         void update_all();
