@@ -48,7 +48,7 @@ while time.time() - start_time < runtime:
 
 fig, ax = plt.subplots()
 ax.set_xlim(-12, 12)  # Set the x-axis limits
-ax.set_ylim(-12, 12)  # Set the y-axis limits
+ax.set_ylim(0, 12)  # Set the y-axis limits
 ax.set_aspect('equal')  # Keep the aspect ratio square
 
 line1, = ax.plot([], [], 'r-', lw=2)  # First segment (red line)
