@@ -56,5 +56,16 @@ def data_basic_test():
     data = lib.data_basic_test()
     return data.value1, data.value2
 
+class leg_thetas(ctypes.Structure):
+    _fields_ = [("value1", ctypes.c_float), ("value2", ctypes.c_float)]
+
+lib.leg_theta_vals.argtypes = [c_int]
+lib.leg_theta_vals.restype = leg_thetas
+
+def leg_theta_values(leg_n):
+    ans = lib.leg_theta_vals(leg_n)
+    return ans.value1, ans.value2
+
+
 if __name__ == "__main__":
     print(f"Binding validate: {lib.test_function()}")

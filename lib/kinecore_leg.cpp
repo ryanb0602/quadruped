@@ -2,8 +2,6 @@
 
 #include <math.h>
 
-#include <iostream>
-
 void leg::set_real_theta(leg_thetas thetas) {
     this->real_a = thetas.angle_a;
     this->real_b = thetas.angle_b;
@@ -50,33 +48,6 @@ leg_position leg::real_pos() {
     return this->forward_kin(this->real_a, this->real_b);
 }
 
-/*
-
-bool leg::set_ideal_x_y(leg_position position) {
-
-    float ee_x = position.pos_x;
-    float ee_y = position.pos_y;
-
-    float ideal_a = acosf((-powf(ee_x, 2) - powf(ee_y, 2)) / (-2 * this->seg_lens * sqrtf(powf(ee_x, 2) + powf(ee_y, 2)))) \
-        + atan2f(ee_y, ee_x);
-
-    float theta_i = acosf((powf(ee_x, 2) + powf(ee_y, 2)) / (2 * powf(this->seg_lens, 2)));
-
-    float ideal_b = theta_i - (M_PI / 2) - ideal_a;
-
-    std::cout << ideal_a << ", " << ideal_b << std::endl;
-
-    leg_thetas ideals = {
-        .angle_a = ideal_a,
-        .angle_b = ideal_b
-    };
-
-    this->set_ideal_theta(ideals);
-
-    return true;
-}
-*/
-
 bool leg::set_ideal_x_y(leg_position position) {
 
     float ee_x = position.pos_x;
@@ -90,7 +61,6 @@ bool leg::set_ideal_x_y(leg_position position) {
 
     // Check if the target is reachable
     if (distance > 2 * L || distance < 0) {
-        std::cerr << "Target out of reach!" << std::endl;
         return false;
     }
 
@@ -102,8 +72,6 @@ bool leg::set_ideal_x_y(leg_position position) {
 
     // Convert to absolute angle from horizontal
     float absolute_b = ideal_a - ideal_b - (M_PI / 2);
-
-    std::cout << ideal_a << ", " << absolute_b << std::endl;
 
     leg_thetas ideals = {
         .angle_a = ideal_a,

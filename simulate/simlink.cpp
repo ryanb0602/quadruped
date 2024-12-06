@@ -27,7 +27,7 @@ void setup_basic_test() {
     parametric *test_parametric = new parametric;
 
     test_parametric->set_function(test_para);
-    test_parametric->set_runtime(2000);
+    test_parametric->set_runtime(10000);
 
     kinematic.bind_parametric(0, test_parametric);
 }
@@ -38,6 +38,10 @@ void update_basic_test() {
 
 leg_position data_basic_test() {
     return kinematic.leg_x_y(0);
+}
+
+leg_thetas leg_theta_vals(int leg_n) {
+    return kinematic.leg_thetas_vals(leg_n);
 }
 
 }

@@ -92,6 +92,8 @@ class kinecore {
 
         leg_position leg_x_y(int leg_n);
 
+        leg_thetas leg_thetas_vals(int leg_n);
+
     private:
         leg leg_arr[4];
         para_handler parametric_handler;
