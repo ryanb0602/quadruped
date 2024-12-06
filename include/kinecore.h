@@ -82,11 +82,17 @@ class kinecore {
         //set leg segment lengths for all legs in meters
         void set_segment_lens(float len);
 
-        void bind_parametric(leg *targ, parametric (*function)());
+        void bind_parametric(int leg_n, parametric *function);
 
         //implemented right now for simulation
 
         void set_real_thetas(int leg_n, float a, float b);
+
+        void update_paras();
+
+        leg_position leg_x_y(int leg_n);
+
+        leg_thetas leg_thetas_vals(int leg_n);
 
     private:
         leg leg_arr[4];
