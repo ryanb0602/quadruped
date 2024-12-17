@@ -3,7 +3,7 @@
 #include <kinecore.h>
 #include <math.h>
 
-/*
+
 leg_position test_para(int t) {
     float x = sinf(M_PI * t / 1000);
     float y = -(cosf(M_PI * t / 1000) - 8);
@@ -15,8 +15,34 @@ leg_position test_para(int t) {
 
     return return_pos;
 }
-*/
 
+leg_position square(int t) {
+    float x = 0;
+    float y = 5;
+
+    if (t < 250) {
+        x = 0;
+        y = 5;
+    } else if (t < 500) {
+        x = 0;
+        y = 6;
+    } else if (t < 750) {
+        x = 1;
+        y = 6;
+    } else {
+        x = 1;
+        y = 5;
+    }
+
+    leg_position return_pos = {
+        .pos_x = x,
+        .pos_y = y
+    };
+
+    return return_pos;
+}
+
+/*
 leg_position test_para(int t) { 
     float secs = t;
 
@@ -30,3 +56,4 @@ leg_position test_para(int t) {
 
     return return_pos;
 }
+*/

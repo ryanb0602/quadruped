@@ -4,7 +4,6 @@ import time
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
-import numpy as np
 
 MOTOR_SPEED = 10
 LEG_LENGTHS = 6
@@ -79,7 +78,7 @@ def update(i):
     return line1, line2
 
 # Create the animation
-ani = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=True)
+ani = FuncAnimation(fig, update, frames=num_frames, interval=runtime / num_frames, blit=True)
 
 # Show the animation
 plt.show()

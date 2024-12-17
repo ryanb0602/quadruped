@@ -5,4 +5,6 @@
 
 leg_position test_para(int t);
 
+leg_position square(int t);
+
 #endif
