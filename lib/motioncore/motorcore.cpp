@@ -32,3 +32,7 @@ void motor::set_pwm_values(int value) {
         analogWrite(this->pwm_pin2, 0);
     }
 }
+
+void motorcore::bind_kine(kinecore *kine) {
+    this->kine = kine;
+}
