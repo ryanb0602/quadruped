@@ -25,9 +25,6 @@ struct leg_deltas {
 class leg {
 
     public:
-
-        //sets current real
-        void set_real_theta(leg_thetas thetas);
         
         //sets what the ideal angles should currently be
         void set_ideal_theta(leg_thetas thetas);
@@ -38,8 +35,6 @@ class leg {
         //gets adjusted ideal thetas
         leg_thetas adj_ideal_thetas();
 
-        //gets the current real thetas
-        leg_thetas real_thetas();
 
         //sets the ideal xy
         //false if pos is unreachable
@@ -58,8 +53,7 @@ class leg {
         leg_position forward_kin(float angle_a, float angle_b);
         float ideal_a;
         float ideal_b;
-        float real_a;
-        float real_b;
+
         float seg_lens;
 
         //here for now, will be used for stabilization and hip y value compensation
@@ -76,17 +70,11 @@ class leg {
 class kinecore {
 
     public:
-        //gets all delta angles for motion core
-        leg_deltas all_leg_deltas();
 
         //set leg segment lengths for all legs in meters
         void set_segment_lens(float len);
 
         void bind_parametric(int leg_n, parametric *function);
-
-        //implemented right now for simulation
-
-        void set_real_thetas(int leg_n, float a, float b);
 
         void update_paras();
 
