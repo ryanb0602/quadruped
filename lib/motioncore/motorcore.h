@@ -4,7 +4,6 @@
 #include <vector>
 #include <kinecore.h>
 #include <QuickPID.h>
-#include <Arduino.h>
 
 class motor {
     public:
@@ -19,7 +18,7 @@ class motor {
         //set between -255 and 255
         void set_pwm_values(int value);
 
-        float get_theta();
+        void update_theta();
 
         void set_ideal_theta(float theta);
 

@@ -1,11 +1,15 @@
 #include <motorcore.h>
 
+#include <Arduino.h>
+
 void motor::set_ident(int ident) {
     this->ident = ident;
 }
 
 void motor::trigger_error() {
-    Serial.println("Error triggered on motor: " + this->ident + ", PWM set to 0");
+    Serial.print("Error triggered on motor: ");
+    Serial.print(this->ident);
+    Serial.println(", PWM set to 0");
     this->set_pwm_values(0);
     this->error_state = true;
 }
@@ -45,7 +49,7 @@ void motor::set_pwm_values(int value) {
     }
 }
 
-float motor::get_theta() {
+void motor::update_theta() {
     int adc_value = poll_adc();
     for (int i = 0; i < this->lookup_table.size() - 1; i++) {
         if (adc_value >= this->lookup_table[i].first) {
@@ -53,34 +57,35 @@ float motor::get_theta() {
             this->speed = (this_pos - this->last_pos) / (millis() - this->time_of_last_pos);
             this->last_pos = this_pos;
             this->time_of_last_pos = millis();
-            return this_pos;
         }
     }
-    
 }
 
-float motor::set_ideal_theta(float theta) {
+void motor::set_ideal_theta(float theta) {
     this->target = theta;
 }
 
 void motor::init_pos(float p, float i, float d) {
-    this->position_PID = new QuickPID(&this->get_theta(), &this->target_speed, &this->target, p, i, d);
-    this->positionPID.SetMode(QuickPID::Control::automatic);
-    this->positionPID.SetOutputLimits(-100, 100);
+    this->position_PID = new QuickPID(&this->last_pos, &this->target_speed, &this->target, p, i, d, QuickPID::Action::direct);
+    this->position_PID->SetMode(QuickPID::Control::automatic);
+    this->position_PID->SetOutputLimits(-100, 100);
 }
 
 void motor::init_speed(float p, float i, float d) {
-    this->position_PID = new QuickPID(&this->speed, &this->pwm_value, this->target_speed, p, i, d);
-    this->speedPID.SetMode(QuickPID::Control::automatic);
-    this->speedPID.SetOutputLimits(-255, 255);
+    this->position_PID = new QuickPID(&this->speed, (float*)&this->pwm_value, &this->target_speed, p, i, d, QuickPID::Action::direct);
+    this->speed_PID->SetMode(QuickPID::Control::automatic);
+    this->speed_PID->SetOutputLimits(-255, 255);
 }
 
 void motor::update_PID() {
-    this->position_PID->compute();
-    this->speed_PID->compute();
+    this->update_theta();
+
+    this->position_PID->Compute();
+    this->speed_PID->Compute();
 
     this->set_pwm_values(this->pwm_value);
 }
 
-float 
-
+int motor::poll_adc() {
+    return analogRead(this->adc_pin);
+}

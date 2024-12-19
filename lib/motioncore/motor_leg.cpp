@@ -1,5 +1,7 @@
 #include <motorcore.h>
 
+#include <Arduino.h>
+
 void motor_leg::set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b) {
     motor_a = new motor();
     motor_b = new motor();

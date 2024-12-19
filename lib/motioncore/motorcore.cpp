@@ -1,5 +1,7 @@
 #include <motorcore.h>
 
+#include <Arduino.h>
+
 void motorcore::bind_kine(kinecore *kine) {
     this->kine = kine;
 }
