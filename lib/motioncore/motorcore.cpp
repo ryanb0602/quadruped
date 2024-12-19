@@ -8,9 +8,15 @@ void motorcore::set_leg_pins(int leg_num, int pin_1_a, int pin_1_b, int pin_2_a,
     this->leg_arr[leg_num].set_leg_pins(pin_1_a, pin_1_b, pin_2_a, pin_2_b);
 }
 
-void motorcore::init_leg_PIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
+void motorcore::init_leg_pPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
     for (int i = 0; i < 4; ++i) {
-        this->leg_arr[i].init_PID(p_a, i_a, d_a, p_b, i_b, d_b);
+        this->leg_arr[i].init_pos_PID(p_a, i_a, d_a, p_b, i_b, d_b);
+    }
+}
+
+void motorcore::init_leg_sPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
+    for (int i = 0; i < 4; ++i) {
+        this->leg_arr[i].init_speed_PID(p_a, i_a, d_a, p_b, i_b, d_b);
     }
 }
 

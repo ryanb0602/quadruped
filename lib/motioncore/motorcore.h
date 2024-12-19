@@ -59,7 +59,8 @@ class motor {
 
 class motor_leg {
     public:
-        void init_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+        void init_pos_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+        void init_speed_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
         void set_ideal_thetas(float a, float b);
         void set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
         void update_PID();
@@ -71,7 +72,8 @@ class motor_leg {
 class motorcore {
     public:
         void set_leg_pins(int leg_num, int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
-        void init_leg_PIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+        void init_leg_pPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+        void init_leg_sPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
 
         void bind_kine(kinecore *kine);
         void update_ideal_thetas();

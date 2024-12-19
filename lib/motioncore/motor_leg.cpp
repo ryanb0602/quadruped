@@ -8,9 +8,14 @@ void motor_leg::set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b)
     motor_b->set_pwm_pins(pin_2_a, pin_2_b);
 }
 
-void motor_leg::init_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
+void motor_leg::init_pos_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
     motor_a->init_pos(p_a, i_a, d_a);
     motor_b->init_pos(p_b, i_b, d_b);
+}
+
+void motor_leg::init_speed_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
+    motor_a->init_speed(p_a, i_a, d_a);
+    motor_b->init_speed(p_b, i_b, d_b);
 }
 
 void motor_leg::set_ideal_thetas(float a, float b) {
