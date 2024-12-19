@@ -4,7 +4,7 @@
 #include <ADC_LOOKUPS.h>
 
 kinecore kine;
-motorcore motorcore;
+motorcore motorController;
 
 #define MOTOR_1_PWM1 15
 #define MOTOR_1_PWM2 16
@@ -31,21 +31,21 @@ motorcore motorcore;
 void setup() {
   Serial.begin(115200);
 
-  motorcore.bind_kine(&kine);
+  motorController.bind_kine(&kine);
 
-  motorcore.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
-  motorcore.init_leg_pPIDS(LEG_A_PKP, LEG_A_PKI, LEG_A_PKD, LEG_B_PKP, LEG_B_PKI, LEG_B_PKD);
-  motorcore.init_leg_sPIDS(LEG_A_SKP, LEG_A_SKI, LEG_A_SKD, LEG_B_SKP, LEG_B_SKI, LEG_B_SKD);
+  motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
+  motorController.init_leg_pPIDS(LEG_A_PKP, LEG_A_PKI, LEG_A_PKD, LEG_B_PKP, LEG_B_PKI, LEG_B_PKD);
+  motorController.init_leg_sPIDS(LEG_A_SKP, LEG_A_SKI, LEG_A_SKD, LEG_B_SKP, LEG_B_SKI, LEG_B_SKD);
 
   int lookup_table_a[LEG_LOOKUP_A_LEN][2] = LEG_LOOKUP_A;
   int lookup_table_b[LEG_LOOKUP_B_LEN][2] = LEG_LOOKUP_B;
 
-  motorcore.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN);  
+  motorController.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN);  
   
 }
 
 void loop() {
-  motorcore.update_ideal_thetas();
-  motorcore.update_PID();
+  motorController.update_ideal_thetas();
+  motorController.update_PID();
 }
 
