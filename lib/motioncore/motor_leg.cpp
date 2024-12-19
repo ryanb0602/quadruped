@@ -28,4 +28,9 @@ void motor_leg::set_ideal_thetas(float a, float b) {
 void motor_leg::update_PID() {
     motor_a->update_PID();
     motor_b->update_PID();
-} 
+}
+
+void motor_leg::set_lookup_table(int table_a[][2], int table_b[][2], int table_size) {
+    motor_a->set_lookup_table(table_a, table_size);
+    motor_b->set_lookup_table(table_b, table_size);
+}

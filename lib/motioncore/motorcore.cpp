@@ -22,6 +22,10 @@ void motorcore::init_leg_sPIDS(float p_a, float i_a, float d_a, float p_b, float
     }
 }
 
+void motorcore::set_leg_lookup_table(int leg_num, int table_a[][2], int table_b[][2], int table_size) {
+    this->leg_arr[leg_num].set_lookup_table(table_a, table_b, table_size);
+}
+
 void motorcore::update_ideal_thetas() {
     for (int i = 0; i < 4; ++i) {
         leg_thetas thetas = this->kine->leg_thetas_vals(i);
