@@ -3,9 +3,15 @@
 
 #include <vector>
 #include <kinecore.h>
+#include <QuickPID.h>
+#include <Arduino.h>
 
 class motor {
     public:
+        void set_ident(int ident);
+
+        void trigger_error();
+
         void set_pwm_pins(int pin_1, int pin_2);
         void set_adc_pin(int pin);
         void set_lookup_table(int table[][2], int table_size);
@@ -13,27 +19,69 @@ class motor {
         //set between -255 and 255
         void set_pwm_values(int value);
 
-        leg_thetas get_thetas();
+        float get_theta();
 
-        void set_ideal_thetas(leg_thetas thetas);
+        void set_ideal_theta(float theta);
+
+        void init_pos(float p, float i, float d);
+        void init_speed(float p, float i, float d);
+
+        void update_PID();
 
     private:
+        int ident;
+
+        bool error_state = false;
+
         std::vector<std::pair<float, float>> lookup_table;
+
         int poll_adc();
+
         int pwm_pin1;
         int pwm_pin2;
+
         int adc_pin;
-        float target_a;
-        float target_b;
+
+        float target;
+
+        QuickPID *position_PID;
+        QuickPID *speed_PID;
+
+        float target_speed;
+
+        float speed;
+
+        float last_pos;
+        float time_of_last_pos;
+
+        int pwm_value;
+};
+
+class motor_leg {
+    public:
+        void init_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+        void set_ideal_thetas(float a, float b);
+        void set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
+        void update_PID();
+    private:
+        motor *motor_a;
+        motor *motor_b;
 };
 
 class motorcore {
     public:
-        motor motor_arr[8];
+        void set_leg_pins(int leg_num, int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
+        void init_leg_PIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+
         void bind_kine(kinecore *kine);
         void update_ideal_thetas();
+
+        void update_PID();
+        void update_PID(int leg_num);
+
     private:
         kinecore *kine;
+        motor_leg leg_arr[4];
 };
 
 #endif
