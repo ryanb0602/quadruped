@@ -42,3 +42,7 @@ void motorcore::update_PID() {
 void motorcore::update_PID(int leg_num) {
     this->leg_arr[leg_num].update_PID();
 }
+
+int motorcore::get_real_ADC_val(int leg_num, int a_b) {
+    return this->leg_arr[leg_num].get_real_ADC_val(a_b);
+}

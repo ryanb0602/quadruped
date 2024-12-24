@@ -27,14 +27,14 @@ class motor {
 
         void update_PID();
 
+        int poll_adc();
+
     private:
         int ident;
 
         bool error_state = false;
 
         std::vector<std::pair<float, float>> lookup_table;
-
-        int poll_adc();
 
         int pwm_pin1;
         int pwm_pin2;
@@ -64,6 +64,7 @@ class motor_leg {
         void set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
         void update_PID();
         void set_lookup_table(int table_a[][2], int table_b[][2], int table_size);
+        int get_real_ADC_val(int a_b);
     private:
         motor *motor_a;
         motor *motor_b;
@@ -81,6 +82,9 @@ class motorcore {
 
         void update_PID();
         void update_PID(int leg_num);
+
+        //0 for a, 1 for b
+        int get_real_ADC_val(int leg_num, int a_b);
 
     private:
         kinecore *kine;

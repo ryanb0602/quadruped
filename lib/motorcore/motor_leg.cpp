@@ -34,3 +34,11 @@ void motor_leg::set_lookup_table(int table_a[][2], int table_b[][2], int table_s
     motor_a->set_lookup_table(table_a, table_size);
     motor_b->set_lookup_table(table_b, table_size);
 }
+
+int motor_leg::get_real_ADC_val(int a_b) {
+    if (a_b == 0) {
+        return motor_a->poll_adc();
+    } else {
+        return motor_b->poll_adc();
+    }
+}

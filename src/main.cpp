@@ -31,6 +31,10 @@ motorcore motorController;
 void setup() {
   Serial.begin(115200);
 
+  //for lookup test
+  motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
+
+  /*
   motorController.bind_kine(&kine);
 
   motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
@@ -40,12 +44,22 @@ void setup() {
   int lookup_table_a[LEG_LOOKUP_A_LEN][2] = LEG_LOOKUP_A;
   int lookup_table_b[LEG_LOOKUP_B_LEN][2] = LEG_LOOKUP_B;
 
-  motorController.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN);  
+  motorController.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN); 
+
+  */ 
   
 }
 
 void loop() {
+  //Reading out adcs
+  Serial.print("ADC A: ");
+  Serial.println(motorController.get_real_ADC_val(0, 0));
+  Serial.print("ADC B: ");
+  Serial.println(motorController.get_real_ADC_val(0, 1));
+
+  /*
   motorController.update_ideal_thetas();
   motorController.update_PID();
+  */
 }
 
