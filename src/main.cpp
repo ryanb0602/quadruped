@@ -12,8 +12,8 @@ motorcore motorController;
 #define MOTOR_2_PWM1 17
 #define MOTOR_2_PWM2 18
 
-#define MOTOR_1_ADC1 4
-#define MOTOR_2_ADC2 5
+#define MOTOR_1_ADC1 5
+#define MOTOR_2_ADC2 4
 
 #define LEG_A_PKP .5
 #define LEG_A_PKI 0
@@ -38,6 +38,11 @@ void setup() {
   motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
   motorController.set_ADC_pin(0, MOTOR_1_ADC1, MOTOR_2_ADC2);
 
+  int lookup_table_a[LEG_LOOKUP_A_LEN][2] = LEG_LOOKUP_A;
+  int lookup_table_b[LEG_LOOKUP_B_LEN][2] = LEG_LOOKUP_B;
+
+  motorController.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN);
+
   /*
   motorController.bind_kine(&kine);
 
@@ -54,12 +59,20 @@ void setup() {
   
 }
 
+unsigned long last_time = 0;
+
 void loop() {
   //Reading out adcs
-  Serial.print("ADC A: ");
-  Serial.println(motorController.get_real_ADC_val(0, 0));
-  Serial.print("ADC B: ");
-  Serial.println(motorController.get_real_ADC_val(0, 1));
+  //motorController.update_PID(0);
+  if (millis() - last_time > 5000) {
+    Serial.print("ADC A: ");
+    Serial.println(motorController.get_real_ADC_val(0, 0));
+    motorController.print_angle(0, 0);
+    Serial.print("ADC B: ");
+    Serial.println(motorController.get_real_ADC_val(0, 1));
+    last_time = millis();
+  }
+  
 
   /*
   motorController.update_ideal_thetas();

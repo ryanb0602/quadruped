@@ -50,3 +50,7 @@ int motorcore::get_real_ADC_val(int leg_num, int a_b) {
 void motorcore::set_ADC_pin(int leg_num, int pin_a, int pin_b) {
     this->leg_arr[leg_num].set_ADC_pins(pin_a, pin_b);
 }
+
+void motorcore::print_angle(int leg_num, int a_b) {
+    this->leg_arr[leg_num].print_angle(a_b);
+}

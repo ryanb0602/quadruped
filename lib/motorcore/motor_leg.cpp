@@ -47,3 +47,11 @@ int motor_leg::get_real_ADC_val(int a_b) {
         return motor_b->poll_adc();
     }
 }
+
+void motor_leg::print_angle(int a_b) {
+    if (a_b == 0) {
+        motor_a->print_angle();
+    } else {
+        motor_b->print_angle();
+    }
+}

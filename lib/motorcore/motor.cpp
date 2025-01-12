@@ -89,3 +89,11 @@ void motor::update_PID() {
 int motor::poll_adc() {
     return analogRead(this->adc_pin);
 }
+
+void motor::print_angle() {
+    this->update_theta();
+    Serial.print("Motor: ");
+    Serial.print(this->ident);
+    Serial.print(" Angle: ");
+    Serial.println(this->last_pos);
+}
