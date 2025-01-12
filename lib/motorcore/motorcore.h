@@ -65,6 +65,7 @@ class motor_leg {
         void update_PID();
         void set_lookup_table(int table_a[][2], int table_b[][2], int table_size);
         int get_real_ADC_val(int a_b);
+        void set_ADC_pins(int pin_a, int pin_b);
     private:
         motor *motor_a;
         motor *motor_b;
@@ -73,6 +74,7 @@ class motor_leg {
 class motorcore {
     public:
         void set_leg_pins(int leg_num, int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
+        void set_ADC_pin(int leg_num, int pin_a, int pin_b);
         void init_leg_pPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
         void init_leg_sPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
         void set_leg_lookup_table(int leg_num, int table_a[][2], int table_b[][2], int table_size);

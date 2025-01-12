@@ -35,6 +35,11 @@ void motor_leg::set_lookup_table(int table_a[][2], int table_b[][2], int table_s
     motor_b->set_lookup_table(table_b, table_size);
 }
 
+void motor_leg::set_ADC_pins(int pin_a, int pin_b) {
+    motor_a->set_adc_pin(pin_a);
+    motor_b->set_adc_pin(pin_b);
+}
+
 int motor_leg::get_real_ADC_val(int a_b) {
     if (a_b == 0) {
         return motor_a->poll_adc();

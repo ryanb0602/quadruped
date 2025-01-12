@@ -12,6 +12,9 @@ motorcore motorController;
 #define MOTOR_2_PWM1 17
 #define MOTOR_2_PWM2 18
 
+#define MOTOR_1_ADC1 4
+#define MOTOR_2_ADC2 5
+
 #define LEG_A_PKP .5
 #define LEG_A_PKI 0
 #define LEG_A_PKD 0
@@ -33,6 +36,7 @@ void setup() {
 
   //for lookup test
   motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
+  motorController.set_ADC_pin(0, MOTOR_1_ADC1, MOTOR_2_ADC2);
 
   /*
   motorController.bind_kine(&kine);
