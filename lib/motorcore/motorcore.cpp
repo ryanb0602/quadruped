@@ -50,3 +50,7 @@ void motorcore::set_ADC_pin(int leg_num, int pin_a, int pin_b) {
 void motorcore::print_angle(int leg_num, int a_b) {
     this->leg_arr[leg_num].print_angle(a_b);
 }
+
+void motorcore::calibrate_leg(int leg_num, float mech_max_a, float mech_min_a, float mech_max_b, float mech_min_b) {
+    this->leg_arr[leg_num].calibrate_leg(mech_max_a, mech_min_a, mech_max_b, mech_min_b);
+}

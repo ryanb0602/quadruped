@@ -85,3 +85,40 @@ void motor::print_angle() {
     Serial.print(" Angle: ");
     Serial.println(this->last_pos);
 }
+
+void motor::calibrate(float mech_max, float mech_min) {
+    this->set_pwm_values(-70);
+
+    int adc_val;
+    int last_adc_val;
+    unsigned long last_time = millis();
+
+    while (1) {
+        if (last_time - millis() >= 100) {
+            last_adc_val = adc_val;
+            adc_val = poll_adc();
+
+            if (adc_val - last_adc_val <= 5) {
+                this->set_pwm_values(0);
+                break;
+            }
+        }
+    }
+    this->lookup_table.push_back(std::make_pair(adc_val, mech_min));
+    
+    this->set_pwm_values(70);
+
+    while (1) {
+        if (last_time - millis() >= 100) {
+            last_adc_val = adc_val;
+            adc_val = poll_adc();
+
+            if (adc_val - last_adc_val <= 5) {
+                this->set_pwm_values(0);
+                break;
+            }
+        }
+    }
+
+    this->lookup_table.push_back(std::make_pair(adc_val, mech_max));
+}
