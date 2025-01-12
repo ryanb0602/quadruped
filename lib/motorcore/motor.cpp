@@ -53,6 +53,7 @@ void motor::update_theta() {
     int adc_value = poll_adc();
     for (int i = 0; i < this->lookup_table.size() - 1; i++) {
         if (adc_value >= this->lookup_table[i].first) {
+            Serial.println(this->lookup_table[i].second);
             float this_pos =  (this->lookup_table[i].second + (adc_value * (this->lookup_table[i + 1].second - this->lookup_table[i].second) / (this->lookup_table[i + 1].first - this->lookup_table[i].first)));
             this->speed = (this_pos - this->last_pos) / (millis() - this->time_of_last_pos);
             this->last_pos = this_pos;
