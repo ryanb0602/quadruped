@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <kinecore.h>
 #include <motorcore.h>
-#include <ADC_LOOKUPS.h>
 
 kinecore kine;
 motorcore motorController;
@@ -37,11 +36,6 @@ void setup() {
   //for lookup test
   motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
   motorController.set_ADC_pin(0, MOTOR_1_ADC1, MOTOR_2_ADC2);
-
-  int lookup_table_a[LEG_LOOKUP_A_LEN][2] = LEG_LOOKUP_A;
-  int lookup_table_b[LEG_LOOKUP_B_LEN][2] = LEG_LOOKUP_B;
-
-  motorController.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN);
 
   /*
   motorController.bind_kine(&kine);
