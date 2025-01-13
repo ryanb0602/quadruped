@@ -51,7 +51,7 @@ void setup() {
 
   */ 
 
-  motorController.calibrate_leg(0, 0, 0, 0, 0);
+  motorController.calibrate_leg(0, 0, 0, 71, 5);
   
 }
 
@@ -63,7 +63,7 @@ void loop() {
   if (millis() - last_time > 5000) {
     Serial.print("ADC A: ");
     Serial.println(motorController.get_real_ADC_val(0, 0));
-    //motorController.print_angle(0, 0);
+    motorController.print_angle(0, 1);
     Serial.print("ADC B: ");
     Serial.println(motorController.get_real_ADC_val(0, 1));
     last_time = millis();
