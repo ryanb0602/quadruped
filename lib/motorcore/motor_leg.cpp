@@ -30,11 +30,6 @@ void motor_leg::update_PID() {
     motor_b->update_PID();
 }
 
-void motor_leg::set_lookup_table(int table_a[][2], int table_b[][2], int table_size) {
-    motor_a->set_lookup_table(table_a, table_size);
-    motor_b->set_lookup_table(table_b, table_size);
-}
-
 void motor_leg::set_ADC_pins(int pin_a, int pin_b) {
     motor_a->set_adc_pin(pin_a);
     motor_b->set_adc_pin(pin_b);
@@ -54,4 +49,9 @@ void motor_leg::print_angle(int a_b) {
     } else {
         motor_b->print_angle();
     }
+}
+
+void motor_leg::calibrate_leg(float mech_max_a, float mech_min_a, float mech_max_b, float mech_min_b) {
+    motor_a->calibrate(mech_max_a, mech_min_a);
+    motor_b->calibrate(mech_max_b, mech_min_b);
 }

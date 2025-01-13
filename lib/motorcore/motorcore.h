@@ -13,7 +13,6 @@ class motor {
 
         void set_pwm_pins(int pin_1, int pin_2);
         void set_adc_pin(int pin);
-        void set_lookup_table(int table[][2], int table_size);
 
         //set between -255 and 255
         void set_pwm_values(int value);
@@ -30,6 +29,8 @@ class motor {
         int poll_adc();
 
         void print_angle();
+
+        void calibrate(float mech_max, float mech_min);
 
     private:
         int ident;
@@ -65,10 +66,11 @@ class motor_leg {
         void set_ideal_thetas(float a, float b);
         void set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
         void update_PID();
-        void set_lookup_table(int table_a[][2], int table_b[][2], int table_size);
         int get_real_ADC_val(int a_b);
         void set_ADC_pins(int pin_a, int pin_b);
         void print_angle(int a_b);
+
+        void calibrate_leg(float mech_max_a, float mech_min_a, float mech_max_b, float mech_min_b);
     private:
         motor *motor_a;
         motor *motor_b;
@@ -80,7 +82,6 @@ class motorcore {
         void set_ADC_pin(int leg_num, int pin_a, int pin_b);
         void init_leg_pPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
         void init_leg_sPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
-        void set_leg_lookup_table(int leg_num, int table_a[][2], int table_b[][2], int table_size);
 
         void bind_kine(kinecore *kine);
         void update_ideal_thetas();
@@ -92,6 +93,8 @@ class motorcore {
         int get_real_ADC_val(int leg_num, int a_b);
 
         void print_angle(int leg_num, int a_b);
+
+        void calibrate_leg(int leg_num, float mech_max_a, float mech_min_a, float mech_max_b, float mech_min_b);
 
     private:
         kinecore *kine;

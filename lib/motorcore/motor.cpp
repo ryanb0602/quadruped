@@ -25,21 +25,13 @@ void motor::set_adc_pin(int pin) {
     this->adc_pin = pin;
 }
 
-void motor::set_lookup_table(int table[][2], int table_size) {
-    this->lookup_table.clear(); // Clear any existing data
-
-    for (int i = 0; i < table_size; ++i) {
-        this->lookup_table.emplace_back(table[i][0], table[i][1]); // Convert and store
-    }
-}
-
 void motor::set_pwm_values(int value) {
     if (this->error_state) {
         return;
     }
     if (value == 0) {
-        digitalWrite(this->pwm_pin1, LOW);
-        digitalWrite(this->pwm_pin2, LOW);
+        analogWrite(this->pwm_pin1, 0);
+        analogWrite(this->pwm_pin2, 0);
     } else if (value < 0) {
         analogWrite(this->pwm_pin1, 0);
         analogWrite(this->pwm_pin2, abs(value));
@@ -51,15 +43,10 @@ void motor::set_pwm_values(int value) {
 
 void motor::update_theta() {
     int adc_value = poll_adc();
-    for (int i = 0; i < this->lookup_table.size() - 1; i++) {
-        if (adc_value >= this->lookup_table[i].first) {
-            Serial.println(this->lookup_table[i].second);
-            float this_pos =  (this->lookup_table[i].second + (adc_value * (this->lookup_table[i + 1].second - this->lookup_table[i].second) / (this->lookup_table[i + 1].first - this->lookup_table[i].first)));
-            this->speed = (this_pos - this->last_pos) / (millis() - this->time_of_last_pos);
-            this->last_pos = this_pos;
-            this->time_of_last_pos = millis();
-        }
-    }
+    float this_pos =  (this->lookup_table[0].second + (adc_value * (this->lookup_table[1].second - this->lookup_table[0].second) / (this->lookup_table[1].first - this->lookup_table[0].first)));
+    this->speed = (this_pos - this->last_pos) / (millis() - this->time_of_last_pos);
+    this->last_pos = this_pos;
+    this->time_of_last_pos = millis();
 }
 
 void motor::set_ideal_theta(float theta) {
@@ -97,4 +84,45 @@ void motor::print_angle() {
     Serial.print(this->ident);
     Serial.print(" Angle: ");
     Serial.println(this->last_pos);
+}
+
+void motor::calibrate(float mech_max, float mech_min) {
+    this->set_pwm_values(-100);
+
+    delay(1000);
+
+    int adc_val;
+    int last_adc_val;
+    unsigned long last_time = millis();
+
+    while (1) {
+        if (last_time - millis() >= 1000) {
+            last_adc_val = adc_val;
+            adc_val = poll_adc();
+
+            if (abs(adc_val - last_adc_val) <= 1) {
+                this->set_pwm_values(0);
+                break;
+            }
+        }
+    }
+    this->lookup_table.push_back(std::make_pair(adc_val, mech_min));
+    
+    this->set_pwm_values(100);
+    delay(1000);
+
+    while (1) {
+        if (last_time - millis() >= 1000) {
+            last_adc_val = adc_val;
+            adc_val = poll_adc();
+            if (abs(adc_val - last_adc_val) <= 1) {
+                this->set_pwm_values(0);
+                break;
+            }
+        }
+    }
+    this->lookup_table.push_back(std::make_pair(adc_val, mech_max));
+    Serial.println("calibr done");
+    Serial.println(this->lookup_table[0].first);
+    Serial.println(this->lookup_table[1].first);
 }
