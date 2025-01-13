@@ -5,11 +5,11 @@
 kinecore kine;
 motorcore motorController;
 
-#define MOTOR_1_PWM1 15
-#define MOTOR_1_PWM2 16
+#define MOTOR_1_PWM1 17
+#define MOTOR_1_PWM2 18
 
-#define MOTOR_2_PWM1 17
-#define MOTOR_2_PWM2 18
+#define MOTOR_2_PWM1 15
+#define MOTOR_2_PWM2 16
 
 #define MOTOR_1_ADC1 5
 #define MOTOR_2_ADC2 4
@@ -50,6 +50,8 @@ void setup() {
   motorController.set_leg_lookup_table(0, lookup_table_a, lookup_table_b, LEG_LOOKUP_A_LEN); 
 
   */ 
+
+  motorController.calibrate_leg(0, 0, 0, 0, 0);
   
 }
 
@@ -61,7 +63,7 @@ void loop() {
   if (millis() - last_time > 5000) {
     Serial.print("ADC A: ");
     Serial.println(motorController.get_real_ADC_val(0, 0));
-    motorController.print_angle(0, 0);
+    //motorController.print_angle(0, 0);
     Serial.print("ADC B: ");
     Serial.println(motorController.get_real_ADC_val(0, 1));
     last_time = millis();

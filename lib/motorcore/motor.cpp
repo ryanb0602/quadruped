@@ -30,8 +30,8 @@ void motor::set_pwm_values(int value) {
         return;
     }
     if (value == 0) {
-        digitalWrite(this->pwm_pin1, LOW);
-        digitalWrite(this->pwm_pin2, LOW);
+        analogWrite(this->pwm_pin1, 0);
+        analogWrite(this->pwm_pin2, 0);
     } else if (value < 0) {
         analogWrite(this->pwm_pin1, 0);
         analogWrite(this->pwm_pin2, abs(value));
@@ -87,18 +87,20 @@ void motor::print_angle() {
 }
 
 void motor::calibrate(float mech_max, float mech_min) {
-    this->set_pwm_values(-70);
+    this->set_pwm_values(-100);
+
+    delay(1000);
 
     int adc_val;
     int last_adc_val;
     unsigned long last_time = millis();
 
     while (1) {
-        if (last_time - millis() >= 100) {
+        if (last_time - millis() >= 1000) {
             last_adc_val = adc_val;
             adc_val = poll_adc();
 
-            if (adc_val - last_adc_val <= 5) {
+            if (abs(adc_val - last_adc_val) <= 1) {
                 this->set_pwm_values(0);
                 break;
             }
@@ -106,19 +108,21 @@ void motor::calibrate(float mech_max, float mech_min) {
     }
     this->lookup_table.push_back(std::make_pair(adc_val, mech_min));
     
-    this->set_pwm_values(70);
+    this->set_pwm_values(100);
+    delay(1000);
 
     while (1) {
-        if (last_time - millis() >= 100) {
+        if (last_time - millis() >= 1000) {
             last_adc_val = adc_val;
             adc_val = poll_adc();
-
-            if (adc_val - last_adc_val <= 5) {
+            if (abs(adc_val - last_adc_val) <= 1) {
                 this->set_pwm_values(0);
                 break;
             }
         }
     }
-
     this->lookup_table.push_back(std::make_pair(adc_val, mech_max));
+    Serial.println("calibr done");
+    Serial.println(this->lookup_table[0].first);
+    Serial.println(this->lookup_table[1].first);
 }
