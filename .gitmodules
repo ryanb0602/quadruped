@@ -1,0 +1,3 @@
+[submodule "lib/iostream_debug_tool"]
+	path = lib/iostream_debug_tool
+	url = https://github.com/ryanb0602/iostream_debug_tool.git
