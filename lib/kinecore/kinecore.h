@@ -49,6 +49,8 @@ class leg {
         //set seglen
         void set_seg_len(float len);
 
+        void set_ident(int id);
+
     private:
         leg_position forward_kin(float angle_a, float angle_b);
         float ideal_a;
@@ -62,6 +64,8 @@ class leg {
 
         float hip_offset_a;
         float hip_offset_b;
+
+        int ident;
 };
 
 #include <paracore.h>
@@ -70,7 +74,7 @@ class leg {
 class kinecore {
 
     public:
-
+        kinecore();
         //set leg segment lengths for all legs in meters
         void set_segment_lens(float len);
 
