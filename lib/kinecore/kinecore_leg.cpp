@@ -88,3 +88,7 @@ leg_thetas leg::adj_ideal_thetas() {
 void leg::set_seg_len(float len) {
     this->seg_lens = len;
 }
+
+void leg::set_ident(int id) {
+    this->ident = id;
+}
