@@ -6,3 +6,6 @@
 	path = lib/QuickPID
 	url = https://github.com/ryanb0602/QuickPID.git
 	branch = QuickPID-quadruped
+[submodule "lib/ortho-hall-effect-angle-sensing"]
+	path = lib/ortho-hall-effect-angle-sensing
+	url = https://github.com/ryanb0602/ortho-hall-effect-angle-sensing.git
