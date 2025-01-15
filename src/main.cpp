@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include <kinecore.h>
 #include <motorcore.h>
+#include <io_debug_tool.h>
+
+debug_tool debug;
 
 kinecore kine;
 motorcore motorController;
@@ -32,6 +35,10 @@ motorcore motorController;
 
 void setup() {
   Serial.begin(115200);
+
+  debug.set_verbosity(MAIN_FUNCTIONS, debug);
+
+  debug_print(MAIN_FUNCTIONS, "PROGRAM INIT");
 
   //for lookup test
   motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);

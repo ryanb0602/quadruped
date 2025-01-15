@@ -1,15 +1,18 @@
 #include <motorcore.h>
 
 #include <Arduino.h>
+#include <string>
+#include <io_debug_tool.h>
 
 void motor::set_ident(int ident) {
     this->ident = ident;
 }
 
 void motor::trigger_error() {
-    Serial.print("Error triggered on motor: ");
-    Serial.print(this->ident);
-    Serial.println(", PWM set to 0");
+    
+    std::string debug_string = "MOTOR " + std::to_string(this->ident) + " ERROR TRIGGERED";
+    debug_print(SILENT, debug_string);
+
     this->set_pwm_values(0);
     this->error_state = true;
 }

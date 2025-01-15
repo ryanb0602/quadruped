@@ -1,0 +1,8 @@
+[submodule "lib/iostream_debug_tool"]
+	path = lib/iostream_debug_tool
+	url = https://github.com/ryanb0602/iostream_debug_tool.git
+
+[submodule "lib/QuickPID"]
+	path = lib/QuickPID
+	url = https://github.com/ryanb0602/QuickPID.git
+	branch = QuickPID-quadruped

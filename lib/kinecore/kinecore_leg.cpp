@@ -1,10 +1,13 @@
 #include <kinecore.h>
+#include <io_debug_tool.h>
+#include <string>
 
 #include <math.h>
 
 
 void leg::set_ideal_theta(leg_thetas thetas) {
-
+    std::string debug_string = "KINECORE, LEG " + std::to_string(this->ident) + ": Setting ideal thetas to: " + std::to_string(thetas.angle_a) + " " + std::to_string(thetas.angle_b);
+    debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
     this->ideal_a = thetas.angle_a;
     this->ideal_b = thetas.angle_b;
 }
@@ -14,6 +17,8 @@ leg_thetas leg::ideal_thetas() {
         .angle_a = this->ideal_a,
         .angle_b = this->ideal_b
     };
+    std::string debug_string = "KINECORE, LEG " + std::to_string(this->ident) + ": Ideal thetas returned: " + std::to_string(return_structure.angle_a) + " " + std::to_string(return_structure.angle_b);
+    debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
     return return_structure;
 }
 
@@ -25,6 +30,8 @@ leg_position leg::forward_kin(float angle_a, float angle_b) {
         .pos_x = (this->seg_lens * sin(angle_a)) - (this->seg_lens * cos(angle_b)),
         .pos_y = (this->seg_lens * cos(angle_a)) + (this->seg_lens * sin(angle_b))
     };
+    std::string debug_string = "KINECORE, LEG " + std::to_string(this->ident) + ": Forward kine ran";
+    debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
     return return_structure;
 }
 
@@ -62,6 +69,9 @@ bool leg::set_ideal_x_y(leg_position position) {
         .angle_b = absolute_b
     };
 
+    std::string debug_string = "KINECORE, LEG " + std::to_string(this->ident) + ": Reverse kine ran";
+    debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
+
     this->set_ideal_theta(ideals);
 
     return true;
@@ -77,4 +87,8 @@ leg_thetas leg::adj_ideal_thetas() {
 
 void leg::set_seg_len(float len) {
     this->seg_lens = len;
+}
+
+void leg::set_ident(int id) {
+    this->ident = id;
 }

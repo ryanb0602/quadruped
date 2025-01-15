@@ -1,13 +1,19 @@
 #include <motorcore.h>
+#include <io_debug_tool.h>
+#include <string>
 
 #include <Arduino.h>
 
 void motorcore::bind_kine(kinecore *kine) {
     this->kine = kine;
+    std::string debug_string = "MOTORCORE: KINECORE BOUND";
+    debug_print(MAIN_AND_SUB_FUNCTIONS, debug_string);
 }
 
 void motorcore::set_leg_pins(int leg_num, int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b) {
     this->leg_arr[leg_num].set_leg_pins(pin_1_a, pin_1_b, pin_2_a, pin_2_b);
+    std::string debug_string = "MOTORCORE: LEG PINS SET";
+    debug_print(MAIN_AND_SUB_FUNCTIONS, debug_string);
 }
 
 void motorcore::init_leg_pPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b) {
