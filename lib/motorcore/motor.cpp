@@ -85,16 +85,17 @@ int motor::poll_adc(int pin) {
 
 void motor::print_angle() {
     this->update_theta();
-    Serial.print("Motor: ");
-    Serial.print(this->ident);
-    Serial.print(" Angle: Rad: ");
-    Serial.println(this->hall_sensor->read_angle() - this->angle_offset);
-    Serial.print(" Degrees: ");
-    Serial.println(this->hall_sensor->read_angle_degrees() - (this->angle_offset*180/M_PI));
+    std::string debug_string = "Motor: " + std::to_string(this->ident) + " Angle: Rad: " + std::to_string(this->hall_sensor->read_angle() - this->angle_offset) + " Degrees: " + std::to_string(this->hall_sensor->read_angle_degrees() - (this->angle_offset*180/M_PI));
+    debug_print(SILENT, debug_string);
 }
 
 void motor::calibrate(float mech_max, float mech_min) {
-    this->set_pwm_values(-100);
+    std::string debug_string = "Calibrating motor " + std::to_string(this->ident);
+    debug_print(MAIN_FUNCTIONS, debug_string);
+
+    this->set_pwm_values(100);
+
+    debug_print(MAIN_AND_SUB_FUNCTIONS, "MOVING TOWARDS MAXIMUM");
 
     delay(500);
 
@@ -117,17 +118,27 @@ void motor::calibrate(float mech_max, float mech_min) {
 
             float avg = this->avg_deriv(readings);
 
+            debug_print(MAIN_SUB_AND_NUMERICAL_DATA, "Average Derivative: ");
+            debug_string = avg;
+            debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
+
             if (abs(avg) <= 1) {
                 this->set_pwm_values(0);
                 read_max = this->hall_sensor->read_angle();
+
+                debug_string = "MAXIMUM REACHED: " + std::to_string(read_max);
+
+                debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
+
                 readings.clear();
                 break;
             }
         }
     }
 
-    
-    this->set_pwm_values(100);
+    debug_print(MAIN_AND_SUB_FUNCTIONS, "MOVING TOWARDS MINIMUM");
+
+    this->set_pwm_values(-100);
     delay(500);
 
     while (1) {
@@ -141,9 +152,18 @@ void motor::calibrate(float mech_max, float mech_min) {
 
             float avg = this->avg_deriv(readings);
 
+            debug_print(MAIN_SUB_AND_NUMERICAL_DATA, "Average Derivative: ");
+            debug_string = avg;
+            debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
+
             if (abs(avg) <= 1) {
                 this->set_pwm_values(0);
                 read_min = this->hall_sensor->read_angle();
+
+                debug_string = "MAXIMUM REACHED: " + std::to_string(read_max);
+
+                debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_string);
+
                 readings.clear();
                 break;
             }
@@ -151,6 +171,8 @@ void motor::calibrate(float mech_max, float mech_min) {
     }
 
     this->angle_offset = mech_max - read_max;
+
+    debug_string = "Calibration done, different between read range and theoretical range: " + std::to_string(mech_max - mech_min - read_max - read_min);
 
 }
 
