@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <string>
 #include <io_debug_tool.h>
+#include <math.h>
 
 void motor::set_ident(int ident) {
     this->ident = ident;
@@ -24,8 +25,10 @@ void motor::set_pwm_pins(int pin_1, int pin_2) {
     this->pwm_pin2 = pin_2;
 }
 
-void motor::set_adc_pin(int pin) {
-    this->adc_pin = pin;
+void motor::init_hall(int pin_x, int pin_y, sensor_variables sensor) {
+    this->pin_x = pin_x;
+    this->pin_y = pin_y;
+    this->hall_sensor = new angle_sensor(pin_x, pin_y, sensor, *this->poll_adc);
 }
 
 void motor::set_pwm_values(int value) {
@@ -45,11 +48,10 @@ void motor::set_pwm_values(int value) {
 }
 
 void motor::update_theta() {
-    int adc_value = poll_adc();
-    float this_pos =  (this->lookup_table[0].second + (adc_value * (this->lookup_table[1].second - this->lookup_table[0].second) / (this->lookup_table[1].first - this->lookup_table[0].first)));
-    this->speed = (this_pos - this->last_pos) / (millis() - this->time_of_last_pos);
-    this->last_pos = this_pos;
+    float current_angle = this->hall_sensor->read_angle() + this->angle_offset;
+    this->speed = (current_angle - this->last_pos) / (millis() - this->time_of_last_pos);
     this->time_of_last_pos = millis();
+    this->last_pos = current_angle;
 }
 
 void motor::set_ideal_theta(float theta) {
@@ -77,55 +79,89 @@ void motor::update_PID() {
     this->set_pwm_values(this->pwm_value);
 }
 
-int motor::poll_adc() {
-    return analogRead(this->adc_pin);
+int motor::poll_adc(int pin) {
+    return analogRead(pin);
 }
 
 void motor::print_angle() {
     this->update_theta();
     Serial.print("Motor: ");
     Serial.print(this->ident);
-    Serial.print(" Angle: ");
-    Serial.println(this->last_pos);
+    Serial.print(" Angle: Rad: ");
+    Serial.println(this->hall_sensor->read_angle() - this->angle_offset);
+    Serial.print(" Degrees: ");
+    Serial.println(this->hall_sensor->read_angle_degrees() - (this->angle_offset*180/M_PI));
 }
 
 void motor::calibrate(float mech_max, float mech_min) {
     this->set_pwm_values(-100);
 
-    delay(1000);
+    delay(500);
 
-    int adc_val;
-    int last_adc_val;
+    std::vector<float> readings;
+
     unsigned long last_time = millis();
+    unsigned long last_reading = millis();
+
+    float read_max;
+    float read_min;
 
     while (1) {
-        if (last_time - millis() >= 1000) {
-            last_adc_val = adc_val;
-            adc_val = poll_adc();
+        if (last_reading - millis() >= 10) {
 
-            if (abs(adc_val - last_adc_val) <= 1) {
+            readings.push_back(this->hall_sensor->read_angle());
+
+            last_reading = millis();
+        }
+        if (last_time - millis() >= 1000) {
+
+            float avg = this->avg_deriv(readings);
+
+            if (abs(avg) <= 1) {
                 this->set_pwm_values(0);
+                read_max = this->hall_sensor->read_angle();
+                readings.clear();
                 break;
             }
         }
     }
-    this->lookup_table.push_back(std::make_pair(adc_val, mech_min));
+
     
     this->set_pwm_values(100);
-    delay(1000);
+    delay(500);
 
     while (1) {
+        if (last_reading - millis() >= 10) {
+
+            readings.push_back(this->hall_sensor->read_angle());
+
+            last_reading = millis();
+        }
         if (last_time - millis() >= 1000) {
-            last_adc_val = adc_val;
-            adc_val = poll_adc();
-            if (abs(adc_val - last_adc_val) <= 1) {
+
+            float avg = this->avg_deriv(readings);
+
+            if (abs(avg) <= 1) {
                 this->set_pwm_values(0);
+                read_min = this->hall_sensor->read_angle();
+                readings.clear();
                 break;
             }
         }
     }
-    this->lookup_table.push_back(std::make_pair(adc_val, mech_max));
-    Serial.println("calibr done");
-    Serial.println(this->lookup_table[0].first);
-    Serial.println(this->lookup_table[1].first);
+
+    this->angle_offset = mech_max - read_max;
+
+}
+
+float motor::avg_deriv(std::vector<float> &dataset) {
+
+    float deriv_sum = 0;
+
+    for (int i = 1; i < dataset.size(); i++) {
+        deriv_sum += dataset[i] - dataset[i-1];
+    }
+
+    return deriv_sum / (dataset.size() - 1);
+
 }

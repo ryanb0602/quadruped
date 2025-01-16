@@ -4,6 +4,8 @@
 #include <vector>
 #include <kinecore.h>
 #include <QuickPID.h>
+#include <ortho-hall.h>
+#include <vector>
 
 class motor {
     public:
@@ -12,7 +14,8 @@ class motor {
         void trigger_error();
 
         void set_pwm_pins(int pin_1, int pin_2);
-        void set_adc_pin(int pin);
+        
+        void init_hall(int pin_x, int pin_y, sensor_variables sensor);
 
         //set between -255 and 255
         void set_pwm_values(int value);
@@ -26,7 +29,7 @@ class motor {
 
         void update_PID();
 
-        int poll_adc();
+        static int poll_adc(int pin);
 
         void print_angle();
 
@@ -37,12 +40,14 @@ class motor {
 
         bool error_state = false;
 
-        std::vector<std::pair<float, float>> lookup_table;
+        angle_sensor *hall_sensor;
+        int angle_offset;
 
         int pwm_pin1;
         int pwm_pin2;
 
-        int adc_pin;
+        int pin_x;
+        int pin_y;
 
         float target;
 
@@ -57,6 +62,10 @@ class motor {
         float time_of_last_pos;
 
         int pwm_value;
+
+        float avg_deriv(std::vector<float> &data_set);
+
+
 };
 
 class motor_leg {
