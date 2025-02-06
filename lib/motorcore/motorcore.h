@@ -31,7 +31,7 @@ class motor {
         void set_pwm_pins(int pin_1, int pin_2);
         
         //initialize hall sensor
-        void init_hall(int pin_x, int pin_y, sensor_variables sensor);
+        void init_hall(int pin_x, int pin_y, const sensor_variables &sensor);
 
         //set ideal theta
         void set_ideal_theta(float theta);
@@ -98,8 +98,8 @@ class motor {
 
 class motorcore {
     public:
-        //initialize motor controller
-        void initialize_motor(int motor_ident, motor_initialize_struct motor_init);
+        //initialize motor controller individually
+        void initialize_motor(int motor_ident, const motor_initialize_struct &motor_init);
 
         //bind kinecore
         void bind_kine(kinecore *kine);
@@ -116,6 +116,8 @@ class motorcore {
         void calibrate_motor();
         void calibrate_motor(int motor_ident);
 
+        void update_kine();
+
     private:
         //kinecore linkage
         kinecore *kine;
@@ -126,7 +128,7 @@ class motorcore {
         leg 2 - a = 4, b = 5
         leg 3 - a = 6, b = 7*/
         //motor array
-        motor *motors[8];
+        motor* motors[8];
 
 };
 

@@ -25,7 +25,7 @@ void motor::set_pwm_pins(int pin_1, int pin_2) {
     this->pwm_pin2 = pin_2;
 }
 
-void motor::init_hall(int pin_x, int pin_y, sensor_variables sensor) {
+void motor::init_hall(int pin_x, int pin_y, const sensor_variables &sensor) {
     this->pin_x = pin_x;
     this->pin_y = pin_y;
     this->hall_sensor = new angle_sensor(pin_x, pin_y, sensor, *this->poll_adc);
