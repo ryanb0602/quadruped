@@ -7,6 +7,17 @@
 #include <ortho-hall.h>
 #include <vector>
 
+struct motor_initialize_struct {
+    int pwm_pin1;
+    int pwm_pin2;
+    int hall_pin_x;
+    int hall_pin_y;
+    sensor_variables sensor;
+    float p_p, i_p, d_p;
+    float p_s, i_s, d_s;
+    float mech_min, mech_max;
+};
+
 class motor {
     public:
         //set motor identifier, lets debug printouts know motor references
@@ -22,14 +33,11 @@ class motor {
         //initialize hall sensor
         void init_hall(int pin_x, int pin_y, sensor_variables sensor);
 
-        //set between -255 and 255
-        void set_pwm_values(int value);
-
-        //update theta and speed
-        void update_theta();
-
         //set ideal theta
         void set_ideal_theta(float theta);
+
+        //set mechanical limits
+        void set_mech_limits(float min, float max);
 
         //initialize position PID controller
         void init_pos(float p, float i, float d);
@@ -39,16 +47,23 @@ class motor {
         //update PID controllers, to be called every loop or at update frequency
         void update_PID();
 
-        //poll adc
-        static int poll_adc(int pin);
-
         //print angle of motor
         void print_angle();
 
         //calibrate motor
-        void calibrate(float mech_max, float mech_min);
+        void calibrate();
 
     private:
+
+        //set between -255 and 255
+        void set_pwm_values(int value);
+
+        //update theta and speed
+        void update_theta();
+        
+        //poll adc
+        static int poll_adc(int pin);
+
         int ident;
 
         bool error_state = false;
@@ -77,11 +92,29 @@ class motor {
         int pwm_value;
 
         float avg_deriv(std::vector<float> &data_set);
+
+        float mech_min, mech_max;
 };
 
 class motorcore {
     public:
+        //initialize motor controller
+        void initialize_motor(int motor_ident, motor_initialize_struct motor_init);
 
+        //bind kinecore
+        void bind_kine(kinecore *kine);
+
+        //update all PIDs
+        void update_PID();
+        //update one PID
+        void update_PID(int motor_ident);
+
+        //print motor angle
+        void print_angle(int motor_ident);
+
+        //calibrate all motors
+        void calibrate_motor();
+        void calibrate_motor(int motor_ident);
 
     private:
         //kinecore linkage

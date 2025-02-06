@@ -58,6 +58,11 @@ void motor::set_ideal_theta(float theta) {
     this->target = theta;
 }
 
+void motor::set_mech_limits(float min, float max) {
+    this->mech_min = min;
+    this->mech_max = max;
+}
+
 void motor::init_pos(float p, float i, float d) {
     this->position_PID = new QuickPID(&this->last_pos, &this->target_speed, &this->target, p, i, d, QuickPID::Action::direct);
     this->position_PID->SetMode(QuickPID::Control::automatic);
@@ -89,7 +94,7 @@ void motor::print_angle() {
     debug_print(SILENT, debug_string);
 }
 
-void motor::calibrate(float mech_max, float mech_min) {
+void motor::calibrate() {
     std::string debug_string = "Calibrating motor " + std::to_string(this->ident);
     debug_print(MAIN_FUNCTIONS, debug_string);
 
@@ -170,9 +175,9 @@ void motor::calibrate(float mech_max, float mech_min) {
         }
     }
 
-    this->angle_offset = mech_max - read_max;
+    this->angle_offset = this->mech_max - read_max;
 
-    debug_string = "Calibration done, difference between read range and theoretical range: " + std::to_string(mech_max - mech_min - read_max - read_min);
+    debug_string = "Calibration done, difference between read range and theoretical range: " + std::to_string(this->mech_max - this->mech_min - read_max - read_min);
 
 }
 
