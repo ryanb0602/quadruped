@@ -172,7 +172,7 @@ void motor::calibrate(float mech_max, float mech_min) {
 
     this->angle_offset = mech_max - read_max;
 
-    debug_string = "Calibration done, different between read range and theoretical range: " + std::to_string(mech_max - mech_min - read_max - read_min);
+    debug_string = "Calibration done, difference between read range and theoretical range: " + std::to_string(mech_max - mech_min - read_max - read_min);
 
 }
 
