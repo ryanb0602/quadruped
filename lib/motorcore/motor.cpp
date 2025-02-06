@@ -25,7 +25,7 @@ void motor::set_pwm_pins(int pin_1, int pin_2) {
     this->pwm_pin2 = pin_2;
 }
 
-void motor::init_hall(int pin_x, int pin_y, sensor_variables sensor) {
+void motor::init_hall(int pin_x, int pin_y, const sensor_variables &sensor) {
     this->pin_x = pin_x;
     this->pin_y = pin_y;
     this->hall_sensor = new angle_sensor(pin_x, pin_y, sensor, *this->poll_adc);
@@ -56,6 +56,11 @@ void motor::update_theta() {
 
 void motor::set_ideal_theta(float theta) {
     this->target = theta;
+}
+
+void motor::set_mech_limits(float min, float max) {
+    this->mech_min = min;
+    this->mech_max = max;
 }
 
 void motor::init_pos(float p, float i, float d) {
@@ -89,7 +94,7 @@ void motor::print_angle() {
     debug_print(SILENT, debug_string);
 }
 
-void motor::calibrate(float mech_max, float mech_min) {
+void motor::calibrate() {
     std::string debug_string = "Calibrating motor " + std::to_string(this->ident);
     debug_print(MAIN_FUNCTIONS, debug_string);
 
@@ -170,9 +175,9 @@ void motor::calibrate(float mech_max, float mech_min) {
         }
     }
 
-    this->angle_offset = mech_max - read_max;
+    this->angle_offset = this->mech_max - read_max;
 
-    debug_string = "Calibration done, different between read range and theoretical range: " + std::to_string(mech_max - mech_min - read_max - read_min);
+    debug_string = "Calibration done, difference between read range and theoretical range: " + std::to_string(this->mech_max - this->mech_min - read_max - read_min);
 
 }
 

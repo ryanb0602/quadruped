@@ -2,6 +2,7 @@
 #include <kinecore.h>
 #include <motorcore.h>
 #include <io_debug_tool.h>
+#include <CONSTANT.h>
 
 debug_tool debug;
 
@@ -41,9 +42,7 @@ void setup() {
   debug_print(MAIN_FUNCTIONS, "PROGRAM INIT");
 
   //for lookup test
-  motorController.set_leg_pins(0, MOTOR_1_PWM1, MOTOR_1_PWM2, MOTOR_2_PWM1, MOTOR_2_PWM2);
-  motorController.set_ADC_pin(0, MOTOR_1_ADC1, MOTOR_2_ADC2);
-
+  motorController.initialize_motor(0, MOTOR0);
   /*
   motorController.bind_kine(&kine);
 
@@ -58,7 +57,7 @@ void setup() {
 
   */ 
 
-  motorController.calibrate_leg(0, 0, 0, 71, 5);
+  motorController.calibrate_motor(0);
   
 }
 
@@ -68,11 +67,7 @@ void loop() {
   //Reading out adcs
   //motorController.update_PID(0);
   if (millis() - last_time > 5000) {
-    Serial.print("ADC A: ");
-    Serial.println(motorController.get_real_ADC_val(0, 0));
-    motorController.print_angle(0, 1);
-    Serial.print("ADC B: ");
-    Serial.println(motorController.get_real_ADC_val(0, 1));
+    motorController.print_angle(0);
     last_time = millis();
   }
   

@@ -7,35 +7,63 @@
 #include <ortho-hall.h>
 #include <vector>
 
+struct motor_initialize_struct {
+    int pwm_pin1;
+    int pwm_pin2;
+    int hall_pin_x;
+    int hall_pin_y;
+    sensor_variables sensor;
+    float p_p, i_p, d_p;
+    float p_s, i_s, d_s;
+    float mech_min, mech_max;
+};
+
 class motor {
     public:
+        //set motor identifier, lets debug printouts know motor references
         void set_ident(int ident);
 
+        //error state right now needs a full implementation, only stops new PWM values from being set
+        //trigger error state
         void trigger_error();
 
+        //set pwm pins
         void set_pwm_pins(int pin_1, int pin_2);
         
-        void init_hall(int pin_x, int pin_y, sensor_variables sensor);
+        //initialize hall sensor
+        void init_hall(int pin_x, int pin_y, const sensor_variables &sensor);
+
+        //set ideal theta
+        void set_ideal_theta(float theta);
+
+        //set mechanical limits
+        void set_mech_limits(float min, float max);
+
+        //initialize position PID controller
+        void init_pos(float p, float i, float d);
+        //initialize speed PID controller
+        void init_speed(float p, float i, float d);
+
+        //update PID controllers, to be called every loop or at update frequency
+        void update_PID();
+
+        //print angle of motor
+        void print_angle();
+
+        //calibrate motor
+        void calibrate();
+
+    private:
 
         //set between -255 and 255
         void set_pwm_values(int value);
 
+        //update theta and speed
         void update_theta();
-
-        void set_ideal_theta(float theta);
-
-        void init_pos(float p, float i, float d);
-        void init_speed(float p, float i, float d);
-
-        void update_PID();
-
+        
+        //poll adc
         static int poll_adc(int pin);
 
-        void print_angle();
-
-        void calibrate(float mech_max, float mech_min);
-
-    private:
         int ident;
 
         bool error_state = false;
@@ -65,49 +93,43 @@ class motor {
 
         float avg_deriv(std::vector<float> &data_set);
 
-
-};
-
-class motor_leg {
-    public:
-        void init_pos_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
-        void init_speed_PID(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
-        void set_ideal_thetas(float a, float b);
-        void set_leg_pins(int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
-        void update_PID();
-        int get_real_ADC_val(int a_b);
-        void set_ADC_pins(int pin_a, int pin_b);
-        void print_angle(int a_b);
-
-        void calibrate_leg(float mech_max_a, float mech_min_a, float mech_max_b, float mech_min_b);
-    private:
-        motor *motor_a;
-        motor *motor_b;
+        float mech_min, mech_max;
 };
 
 class motorcore {
     public:
-        void set_leg_pins(int leg_num, int pin_1_a, int pin_1_b, int pin_2_a, int pin_2_b);
-        void set_ADC_pin(int leg_num, int pin_a, int pin_b);
-        void init_leg_pPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
-        void init_leg_sPIDS(float p_a, float i_a, float d_a, float p_b, float i_b, float d_b);
+        //initialize motor controller individually
+        void initialize_motor(int motor_ident, const motor_initialize_struct &motor_init);
 
+        //bind kinecore
         void bind_kine(kinecore *kine);
-        void update_ideal_thetas();
 
+        //update all PIDs
         void update_PID();
-        void update_PID(int leg_num);
+        //update one PID
+        void update_PID(int motor_ident);
 
-        //0 for a, 1 for b
-        int get_real_ADC_val(int leg_num, int a_b);
+        //print motor angle
+        void print_angle(int motor_ident);
 
-        void print_angle(int leg_num, int a_b);
+        //calibrate all motors
+        void calibrate_motor();
+        void calibrate_motor(int motor_ident);
 
-        void calibrate_leg(int leg_num, float mech_max_a, float mech_min_a, float mech_max_b, float mech_min_b);
+        void update_kine();
 
     private:
+        //kinecore linkage
         kinecore *kine;
-        motor_leg leg_arr[4];
+        
+        /*motor array mapping
+        leg 0 - a = 0, b = 1
+        leg 1 - a = 2, b = 3
+        leg 2 - a = 4, b = 5
+        leg 3 - a = 6, b = 7*/
+        //motor array
+        motor* motors[8];
+
 };
 
 #endif
