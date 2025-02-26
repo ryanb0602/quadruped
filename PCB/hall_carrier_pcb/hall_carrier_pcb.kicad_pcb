@@ -74,7 +74,7 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
 			(outputdirectory "")
 		)
@@ -95,7 +95,6 @@
 		(property "Reference" "REF**"
 			(at 0 -2.33 45)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "d4f5ed87-291f-4cb5-814c-99c2200b46a4")
 			(effects
 				(font
@@ -2385,8 +2384,7 @@
 		(uuid "a730acf2-7db6-485a-be11-ca26705c95c5")
 		(members "38455c11-3c8a-4422-acad-4666e915703a" "4e15bed7-86e0-40c2-89db-f5ea83789ff5"
 			"57f7fbce-7287-48be-a980-2ceaa37012e6" "613ac728-fc7d-4940-a709-e29337ae8c11"
-			"6f2f9378-68fc-4305-aaf0-6fe87f55e5c3" "927921bf-b28c-463d-82e1-b4e11c8a07d5"
-			"a94f5dc9-521c-4085-b239-15b1d973b7c5" "bf0de430-a559-41be-80ed-9ba930445084"
+			"927921bf-b28c-463d-82e1-b4e11c8a07d5" "bf0de430-a559-41be-80ed-9ba930445084"
 			"d514733b-6b0d-4ee5-8186-358ef6e74b2b" "d8665bc4-6b17-4cdc-ad52-7ee041bbf067"
 			"dcf4a65e-b1ab-446a-b028-8e5012cd2a4f" "fc8ae3e7-37bc-42c6-b121-137c0980ec2b"
 		)
