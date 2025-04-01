@@ -5,3 +5,6 @@
 [submodule "quad_control_code/lib/iostream_debug_tool"]
 	path = quad_control_code/lib/iostream_debug_tool
 	url = https://github.com/ryanb0602/iostream_debug_tool.git
+[submodule "bms_code/lib/iostream_debug_tool"]
+	path = bms_code/lib/iostream_debug_tool
+	url = https://github.com/ryanb0602/iostream_debug_tool.git

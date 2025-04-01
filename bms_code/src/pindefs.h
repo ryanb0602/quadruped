@@ -1,0 +1,31 @@
+/*
+
+
+ALL PIN DEFS ARE TO BE IN THIS FILE
+SOME MAY BE PLACEHOLDERS AT THIS POINT, JUST SO SOMETHING IS VALID FOR USE IN TESTING CODE
+
+
+*/
+
+#define C1_DRAIN 1
+#define C2_DRAIN 2
+#define C3_DRAIN 3
+#define C4_DRAIN 4
+#define C5_DRAIN 5
+#define C6_DRAIN 6
+#define C7_DRAIN 7
+#define C8_DRAIN 8
+
+#define MUX_A3 9
+#define MUX_A2 10
+#define MUX_A1 11
+#define MUX_A0 12
+
+#define SDA 13
+#define SCL 14
+
+#define CHRG_DETECT 17
+
+#define CC_CTRL 18
+#define CV_CTRL 21
+#define FAN_CTRL 33

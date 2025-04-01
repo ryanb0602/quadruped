@@ -1,0 +1,29 @@
+#include <Arduino.h>
+#include <pindefs.h>
+#include <muxed_ina.h>
+#include <vector>
+
+float c3v6_val;
+float c7v2_val;
+float c10v8_val;
+float c14v4_val;
+float c18v0_val;
+float c21v6_val;
+float c25v2_val;
+float c28v8_val;
+float therm1_val;
+float therm2_val;
+float therm3_val;
+float therm4_val;
+
+std::vector<float*> outputs = {&c3v6_val, &c7v2_val, &c10v8_val, &c14v4_val, &c18v0_val, &c21v6_val, &c25v2_val, &c28v8_val, &therm1_val, &therm2_val, &therm3_val, &therm4_val};
+muxed_ina multi_voltage_reader(SDA, SCL, 0x10, 12, outputs);
+
+void setup() {
+  multi_voltage_reader.begin(500);
+}
+
+void loop() {
+  multi_voltage_reader.update();
+}
+
