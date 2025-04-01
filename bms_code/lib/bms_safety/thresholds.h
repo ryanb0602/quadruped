@@ -1,0 +1,25 @@
+/*
+
+SAFETY THRESHOLDS ARE DEFINED HERE
+
+SUBJECT TO CHANGE, THERM1 IS THE THERMISTOR ON THE BATTERY, THERM2 IS THE THERMISTOR ON THE PCB
+
+MINS ARE BEING SET TO HELP DETECT FAULTY THERMISTORS
+
+TEMP IN C, AMPERAGE IN A
+
+*/
+
+#define MCU_TEMP_MAX 85
+
+#define THERM1_MIN 15
+#define THERM1_MAX 25
+
+#define THERM2_MIN 15
+#define THERM2_MAX 25
+
+//placeholder value, should be actually calculated in the future
+#define LOAD_CURRENT_MAX 30
+
+//again, placeholder value
+#define CHARGE_CURRENT_MAX 10
