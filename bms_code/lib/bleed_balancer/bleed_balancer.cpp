@@ -44,16 +44,16 @@ bool bleed_balancer::update() {
         int drain_pin;
 
         if (v1 > v2 && v1 - v2 >= BALANCING_THRESHOLD) {
-            drain_pin = __DRAIN_ARRAY[current_cell];
+            drain_pin = DRAIN_ARRAY[current_cell];
             high_cell = &v1;
             low_cell = &v2;
         } else if (v1 < v2 && v2 - v1 >= BALANCING_THRESHOLD) {
-            drain_pin = __DRAIN_ARRAY[current_cell-1];
+            drain_pin = DRAIN_ARRAY[current_cell-1];
             high_cell = &v2;
             low_cell = &v1;
         } else {
-            digitalWrite(__DRAIN_ARRAY[current_cell], LOW);
-            digitalWrite(__DRAIN_ARRAY[current_cell-1], LOW);
+            digitalWrite(DRAIN_ARRAY[current_cell], LOW);
+            digitalWrite(DRAIN_ARRAY[current_cell-1], LOW);
 
             if (current_min > v1) {
                 current_min = v1;
@@ -98,9 +98,9 @@ void bleed_balancer::back_balance() {
         error = cell_vals[min_cell] - current_min;
         error_sum += error;
         float output = BALANCE_KP * error + BALANCE_KI * error_sum;
-        analogWrite(__DRAIN_ARRAY[min_cell], constrain(output, 0, 255));
+        analogWrite(DRAIN_ARRAY[min_cell], constrain(output, 0, 255));
     } else {
-        digitalWrite(__DRAIN_ARRAY[min_cell], LOW);
+        digitalWrite(DRAIN_ARRAY[min_cell], LOW);
         min_cell--;
         if (min_cell < 0) {
             min_cell = 7;
