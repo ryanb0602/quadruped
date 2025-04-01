@@ -46,10 +46,12 @@ void muxed_ina::update() {
         last_update = current_time;
 
         current_channel += 1;
-        if (current_channel >= num_channels - 1) {
+        if (current_channel >= num_channels) {
             current_channel = 0;
         }
         move_mux(current_channel);
+
+        delay(10);
 
         *outputs[current_channel] = ina.getBusVoltage_V();
 
