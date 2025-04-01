@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <pindefs.h>
 #include <muxed_ina.h>
+#include <bleed_balancer.h>
 #include <vector>
 
 float c3v6_val;
@@ -18,6 +19,7 @@ float therm4_val;
 
 std::vector<float*> outputs = {&c3v6_val, &c7v2_val, &c10v8_val, &c14v4_val, &c18v0_val, &c21v6_val, &c25v2_val, &c28v8_val, &therm1_val, &therm2_val, &therm3_val, &therm4_val};
 muxed_ina multi_voltage_reader(SDA, SCL, 0x10, 12, outputs);
+bleed_balancer balancer(&c3v6_val, &c7v2_val, &c10v8_val, &c14v4_val, &c18v0_val, &c21v6_val, &c25v2_val, &c28v8_val);
 
 void setup() {
   multi_voltage_reader.begin(500);
@@ -25,5 +27,6 @@ void setup() {
 
 void loop() {
   multi_voltage_reader.update();
+  balancer.update();
 }
 
