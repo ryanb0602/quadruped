@@ -12,6 +12,11 @@ bleed_balancer::bleed_balancer(float* c3v6_val, float* c7v2_val, float* c10v8_va
     this->c25v2_val = c25v2_val;
     this->c28v8_val = c28v8_val;
 
+    for (int i = 0; i < 8; i++) {
+        pinMode(DRAIN_ARRAY[i], OUTPUT);
+        digitalWrite(DRAIN_ARRAY[i], LOW);
+    }
+
     cell_vals = std::vector<float>(8, 0.0f);
     debug_print(MAIN_AND_SUB_FUNCTIONS, "BB: CONSTRUCTED BLEED_BALANCER AND INITIALIZED CELL VALS");
 }

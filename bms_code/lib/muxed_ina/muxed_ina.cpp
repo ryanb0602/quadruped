@@ -12,7 +12,7 @@ muxed_ina::muxed_ina(int sda, int scl, int addr, int num_channels, std::vector<f
 
     this->ina = Adafruit_INA219(addr);
 
-    this->ina.setCalibration_16V_400mA();
+    //this->ina.setCalibration_16V_400mA();
 
     this->wire = new TwoWire(0);
 }
@@ -28,6 +28,11 @@ void muxed_ina::begin(int frequency) {
 
     int period = 1000 / (frequency * this->num_channels);
     running = true;
+
+    pinMode(MUX_A0, OUTPUT);
+    pinMode(MUX_A1, OUTPUT);
+    pinMode(MUX_A2, OUTPUT);
+    pinMode(MUX_A3, OUTPUT);
 }
 
 void muxed_ina::stop() {
