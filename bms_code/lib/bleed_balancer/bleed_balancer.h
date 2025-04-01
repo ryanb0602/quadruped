@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <pindefs.h>
 #include <vector>
+#include <io_debug_tool.h>
+#include <string>
 
 
 #ifndef BLEED_BALANCER_H
@@ -31,6 +33,7 @@ class bleed_balancer {
 
         void enable_balancing() {
             balance_enabled = true;
+            debug_print(MAIN_AND_SUB_FUNCTIONS, "BALANCING ENABLED");
         }
 
         void disable_balancing() {
@@ -39,6 +42,7 @@ class bleed_balancer {
             current_min = 5;
             back_balance_state = false;
             current_cell = 1;
+            debug_print(MAIN_AND_SUB_FUNCTIONS, "BALANCING DISABLED");
         }
 
         std::vector<float> get_cell_vals() {

@@ -2,6 +2,7 @@
 #include <vector>
 #include <Adafruit_INA219.h>
 #include <Wire.h>
+#include <string>
 
 #ifndef MUXED_INA_H
 #define MUXED_INA_H

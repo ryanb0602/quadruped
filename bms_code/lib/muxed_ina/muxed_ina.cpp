@@ -1,5 +1,8 @@
 #include <muxed_ina.h>
 
+#include <io_debug_tool.h>
+
+
 muxed_ina::muxed_ina(int sda, int scl, int addr, int num_channels, std::vector<float*> outputs) {
     this->sda = sda;
     this->scl = scl;
@@ -19,6 +22,7 @@ muxed_ina::~muxed_ina() {
 }
 
 void muxed_ina::begin(int frequency) {
+    debug_print(MAIN_AND_SUB_FUNCTIONS, "ANALOG MUX INITIALIZED");
     this->wire->begin(this->sda, this->scl);
     this->ina.begin(this->wire);
 
@@ -44,10 +48,15 @@ void muxed_ina::update() {
 
         *outputs[current_channel] = ina.getBusVoltage_V();
 
+        std::string debug_out = "MUX: CHANNEL READ " + std::to_string(*outputs[current_channel]);
+        debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_out);
+
     }   
 }
 
 void muxed_ina::move_mux(int channel) {
+    std::string debug_out = "MUX: CHANNEL SET TO " + std::to_string(channel);
+    debug_print(MAIN_SUB_AND_NUMERICAL_DATA, debug_out);
     bool a0 = channel & 0b0001;
     bool a1 = channel & 0b0010;
     bool a2 = channel & 0b0100;
